@@ -6,6 +6,8 @@ import {
   View,
   TouchableHighlight,
   Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import Cita from './components/Cita';
 import Formulario from './components/Formulario';
@@ -25,42 +27,54 @@ const App = () => {
       return citasActuales.filter((cita) => cita.id !== id);
     });
   };
+  //Ocultar teclado cuando se hace click fuera del teclado
+  const cerrarTeclado = () => {
+    Keyboard.dismiss();
+  };
   return (
     <>
-      <View style={styles.contenedor}>
-        <Text style={styles.titulo}>Administrador de citas</Text>
-        <View>
-          <TouchableHighlight
-            onPress={() => guardarMostrarForm(!mostrarForm)}
-            style={styles.botonMostrar}>
-            <Text style={styles.textoBotonMostrar}>Crear nueva cita</Text>
-          </TouchableHighlight>
-        </View>
-        <View style={styles.contenido}>
-          {mostrarForm ? (
-            <>
-              <Text style={styles.titulo}>{'Crear nueva cita'}</Text>
-              <Formulario />
-            </>
-          ) : (
-            <>
-              <Text style={styles.titulo}>
-                {citas.length > 0
-                  ? 'Administra tus citas'
-                  : 'No hay citas, agrega una.'}
+      <TouchableWithoutFeedback onPress={() => cerrarTeclado()}>
+        <View style={styles.contenedor}>
+          <Text style={styles.titulo}>Administrador de citas</Text>
+          <View>
+            <TouchableHighlight
+              onPress={() => guardarMostrarForm(!mostrarForm)}
+              style={styles.botonMostrar}>
+              <Text style={styles.textoBotonMostrar}>
+                {mostrarForm ? 'Cancelar crear cita' : 'Crear nueva cita'}
               </Text>
-              <FlatList
-                style={styles.listado}
-                data={citas}
-                renderItem={({item}) => (
-                  <Cita cita={item} eliminarPaciente={eliminarPaciente} />
-                )}
-                keyExtractor={(cita) => cita.id}
-              />
-            </>
-          )}
+            </TouchableHighlight>
+          </View>
+          <View style={styles.contenido}>
+            {mostrarForm ? (
+              <>
+                <Text style={styles.titulo}>{'Crear nueva cita'}</Text>
+                <Formulario
+                  citas={citas}
+                  setCitas={setCitas}
+                  guardarMostrarForm={guardarMostrarForm}
+                />
+              </>
+            ) : (
+              <>
+                <Text style={styles.titulo}>
+                  {citas.length > 0
+                    ? 'Administra tus citas'
+                    : 'No hay citas, agrega una.'}
+                </Text>
+                <FlatList
+                  style={styles.listado}
+                  data={citas}
+                  renderItem={({item}) => (
+                    <Cita cita={item} eliminarPaciente={eliminarPaciente} />
+                  )}
+                  keyExtractor={(cita) => cita.id}
+                />
+              </>
+            )}
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </>
   );
 };

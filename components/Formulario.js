@@ -11,8 +11,9 @@ import {
   Platform,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import shortid from 'shortid';
 
-const Formulario = () => {
+const Formulario = ({citas, setCitas, guardarMostrarForm}) => {
   const [paciente, guardarPaciente] = useState('');
   const [propietario, guardarPropietario] = useState('');
   const [telefono, guardarTelefono] = useState('');
@@ -61,7 +62,6 @@ const Formulario = () => {
 
   //crear nueva cita
   const crearNuevaCita = () => {
-    console.log('CREAR NUEVA CITA');
     //validar
     if (
       paciente.trim() === '' ||
@@ -76,6 +76,14 @@ const Formulario = () => {
       mostrarAlerta();
       return;
     }
+    //Crear una nueva cita
+    const cita = {paciente, propietario, telefono, fecha, hora, sintomas};
+    cita.id = shortid.generate();
+    const citasNuevo = [...citas, cita];
+    setCitas(citasNuevo);
+    //Ocultar formulario
+    guardarMostrarForm(false);
+    //Resetear el formulario
   };
 
   //nuestra alerta si falla la validacion
@@ -186,7 +194,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginTop: 10,
-    height: Platform.OS === 'ios' ? 50 : 30,
+    height: Platform.OS === 'ios' ? 50 : 35,
     borderColor: '#e1e1e1',
     borderWidth: 1,
     borderStyle: 'solid',
