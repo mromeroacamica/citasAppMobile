@@ -6,7 +6,7 @@ import {
     View
 } from 'react-native';
 import Cita from './components/Cita';
-
+import Formulario from './components/Formulario';
 
 const App = () => {
     //definir el state de citas
@@ -26,6 +26,7 @@ const App = () => {
         <>
         <View style={styles.contenedor}>
         <Text style={styles.titulo}>Administrador de citas</Text>
+        <Formulario/>
         <Text style={styles.titulo}>{citas.length > 0 ? 'Administra tus citas': 'No hay citas, agrega una.'}</Text>
         <FlatList
         data={citas}
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
     },
     titulo:{
         color:'#fff',
-        marginTop:40,
+        marginTop:20,
         marginBottom:20,
         fontSize:24,
         fontWeight:'bold',
